@@ -1,0 +1,208 @@
+openapi: 3.0.0
+info:
+  title: Clients
+  description: <table><thead><tr><th>Version</th><th>Author</th><th>Date</th><th>Description</th><th>Revision by</th></tr></thead><tbody><tr><td>1.0.0</td><td>Enok</td><td>2021-08-01</td><td>Creates a new client (POST)</td><td> - </td></tr></tbody></table>
+  version: 1;2021-08-01
+  contact:
+    name: Enok
+    email: enok.jesus@gmail.com
+security:
+  - api_key: []
+paths:
+  /clients.json:
+    post:
+      summary: 'Creates a new client.'
+      description: |-
+        To try it out use api_key: 8b90b198bb858c0e047ee107175c51cd9a3d25a2
+      parameters:
+        - name: api_key
+          in: query
+          description: Consumer api key.
+          required: true
+          schema:
+            type: string
+      tags:
+        - /clients.json
+      responses:
+        '201':
+          description: Business objects that represents a Client.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientPostResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '422':
+          $ref: '#/components/responses/422'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/clientPostRequest'
+        required: true
+servers:
+  - url: https://enok.app.invoicexpress.com
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: query
+      name: api_key
+  schemas:
+    clientPostResponse:
+      description: Business objects that represents a Client.
+      type: object
+      required:
+        - client
+      properties:
+        client:
+          $ref: '#/components/schemas/client'
+      xml:
+        name: xml
+    clientPostRequest:
+      description: Objeto de negócio contendo os dados submetidos à API.  <br>Aplicado workaround para bug do 'oneOf' - utilizar apenas um 'data'
+      type: object
+      required:
+        - client
+      properties:
+        client:
+          $ref: '#/components/schemas/client'
+      xml:
+        name: xml
+    client:
+      description: Business object that represents a Client.
+      type: object
+      properties:
+        id:
+          description: Id auto-generated for a Client
+          type: integer
+          readOnly: true
+          example: 41079180
+        name:
+          description: Client name, normally used for a company name.
+          type: string
+          example: 'Client Name'
+        code:
+          description: Client code, your specific code for the client.
+          type: string
+          example: '12345'
+        email:
+          description: 'Client email address. Must be a valid email address ex: foo@bar.com'
+          type: string
+          example: foo@bar.com
+        language:
+          description: Client language. May be en, pt or es; defaults to the account language.
+          type: string
+          example: pt
+        address:
+          description: Client company address.
+          type: string
+          example: Avenida da República, Lisboa
+        city:
+          description: Client’s city.
+          type: string
+          example: Lisboa
+        postal_code:
+          description: Client’s postal code for it’s company address.
+          type: string
+          example: 1050-555
+        country:
+          description: Country, normally used for a company country. Although country is optional, when supplied, it should match one of the country list on the Appendix of this Documentation.
+          type: string
+          example: Portugal
+        fiscal_id:
+          description: The client fiscal ID (Número de Contribuinte).
+          type: string
+          example: '508025338'
+        website:
+          description: The client web address.
+          type: string
+          example: www.invoicexpress.com
+        phone:
+          description: The client phone number.
+          type: string
+          example: '213456789'
+        fax:
+          description: The client fax number.
+          type: string
+          example: '213456788'
+        preferred_contact:
+          $ref: '#/components/schemas/preferred_contact'
+        observations:
+          description: Default observations for the client, the text in here will be added to the observations field of all the invoices sent to this client.
+          type: string
+          example: 'Observations'
+        send_options:
+          description: 'Send options for the client. Available options are: 1 - send only the original document / 2 – the original and duplicate / 3 – the original, duplicate and triplicate. These affect the generated pdf.'
+          type: integer
+          example: 1
+    preferred_contact:
+      description: The preferred contact details.
+      type: object
+      properties:
+        name:
+          description: 	Name of the preferred contact on your new client.
+          type: string
+          example: 'Bruce Norris'
+        email:
+          description: Email of the preferred contact on your new client.
+          type: string
+          example: email@invoicexpress.com
+        phone:
+          description: Phone number of the preferred contact on your new client.
+          type: string
+          example: '213456789'
+    errorArray:
+      description: Array of errors
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/error'
+    error:
+      description: Object that represents a http error
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          description: Error string.
+          type: string
+      xml:
+        name: xml
+  responses:
+    '401':
+      description: Acess Denied
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+          example:
+            errors: [
+              error: 'Invalid API key'
+            ]
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/javascript:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+    '422':
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+          example:
+            errors: [
+              error: 'Name is a required field'
+            ]
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/javascript:
+          schema:
+            $ref: '#/components/schemas/errorArray'
