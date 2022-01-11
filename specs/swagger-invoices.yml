@@ -1,17 +1,17 @@
 openapi: 3.0.0
 info:
   title: Clients
-  description: <table><thead><tr><th>Version</th><th>Author</th><th>Date</th><th>Description</th><th>Revision by</th></tr></thead><tbody><tr><td>1.0.0</td><td>Enok</td><td>2021-08-01</td><td>Creates a new client (POST)</td><td> - </td></tr></tbody></table>
-  version: 1;2021-08-01
+  description: <table><thead><tr><th>Version</th><th>Author</th><th>Date</th><th>Description</th><th>Revision by</th></tr></thead><tbody><tr><td>1.0.0</td><td>Enok</td><td>2022-01-10</td><td>Creates a new invoice (POST)</td><td> - </td></tr></tbody></table>
+  version: 1;2022-01-10
   contact:
     name: Enok
     email: enok.jesus@gmail.com
 security:
   - api_key: []
 paths:
-  /clients.json:
+  /invoices.json:
     post:
-      summary: 'Creates a new client.'
+      summary: 'Creates a new invoice.'
       description: |-
         To try it out use api_key: 8b90b198bb858c0e047ee107175c51cd9a3d25a2
       parameters:
@@ -22,23 +22,25 @@ paths:
           schema:
             type: string
       tags:
-        - /clients.json
+        - /invoices.json
       responses:
         '201':
-          description: Business objects that represents a Client.
+          description: Business objects that represents an Invoice.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/clientPostResponse'
+                $ref: '#/components/schemas/invoicePostResponse'
         '401':
           $ref: '#/components/responses/401'
+        '409':
+          $ref: '#/components/responses/409'
         '422':
           $ref: '#/components/responses/422'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/clientPostRequest'
+              $ref: '#/components/schemas/invoicePostRequest'
         required: true
 servers:
   - url: https://enok.app.invoicexpress.com
@@ -49,93 +51,82 @@ components:
       in: query
       name: api_key
   schemas:
-    clientPostResponse:
-      description: Business objects that represents a Client.
+    invoicePostResponse:
+      description: Business objects that represents a request to create an Invoice.
       type: object
       required:
-        - client
+        - invoice
       properties:
-        client:
-          $ref: '#/components/schemas/client'
+        invoice:
+          $ref: '#/components/schemas/invoice'
       xml:
         name: xml
-    clientPostRequest:
-      description: Objeto de negócio contendo os dados submetidos à API.  <br>Aplicado workaround para bug do 'oneOf' - utilizar apenas um 'data'
+    invoicePostRequest:
+      description: Business objects that represents a response from Invoice creation.
       type: object
       required:
-        - client
+        - invoice
       properties:
-        client:
-          $ref: '#/components/schemas/client'
+        invoice:
+          $ref: '#/components/schemas/invoice'
       xml:
         name: xml
-    client:
-      description: Business object that represents a Client.
+    invoice:
+      description: Business object that represents an Invoice.
       type: object
       properties:
         id:
-          description: Id auto-generated for a Client
+          description: Id auto-generated for a Client.
           type: integer
           readOnly: true
-          example: 41079180
-        name:
-          description: Client name, normally used for a company name.
+          example: 81967052
+        status:
+          description: Represents the Invoice current status.
           type: string
-          example: 'Client Name'
-        code:
-          description: Client code, your specific code for the client.
+          readOnly: true
+          example: draft
+        archived:
+          description: If the Invoice was archived.
+          type: boolean
+          readOnly: true
+          example: false
+        type:
+          description: The type of document created.
           type: string
-          example: '12345'
-        email:
-          description: 'Client email address. Must be a valid email address ex: foo@bar.com'
+          readOnly: true
+          example: Invoice
+        date:
+          description: "The invoice date. Must be in format dd/mm/yyyy ex.: 03/12/2015. If format is invalid, date will be set to current date."
           type: string
-          example: foo@bar.com
-        language:
-          description: Client language. May be en, pt or es; defaults to the account language.
+          format: date
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          example: 03/12/2017
+        due_date:
+          description: "The invoice due date. Must be in format dd/mm/yyyy ex.: 03/12/2015. If format is invalid, date will be set to current date."
           type: string
-          example: pt
-        address:
-          description: Client company address.
+          format: date
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          example: 03/12/2017
+        reference:
+          description: The invoice purchase order reference field.
           type: string
-          example: Avenida da República, Lisboa
-        city:
-          description: Client’s city.
-          type: string
-          example: Lisboa
-        postal_code:
-          description: Client’s postal code for it’s company address.
-          type: string
-          example: 1050-555
-        country:
-          description: Country, normally used for a company country. Although country is optional, when supplied, it should match one of the country list on the Appendix of this Documentation.
-          type: string
-          example: Portugal
-        fiscal_id:
-          description: The client fiscal ID (Número de Contribuinte).
-          type: string
-          example: '508025338'
-        website:
-          description: The client web address.
-          type: string
-          example: www.invoicexpress.com
-        phone:
-          description: The client phone number.
-          type: string
-          example: '213456789'
-        fax:
-          description: The client fax number.
-          type: string
-          example: '213456788'
-        preferred_contact:
-          $ref: '#/components/schemas/preferred_contact'
+          example: null
         observations:
-          description: Default observations for the client, the text in here will be added to the observations field of all the invoices sent to this client.
+          description: Invoice observations, these will be printed with the invoice.
           type: string
-          example: 'Observations'
-        send_options:
-          description: 'Send options for the client. Available options are: 1 - send only the original document / 2 – the original and duplicate / 3 – the original, duplicate and triplicate. These affect the generated pdf.'
-          type: integer
-          example: 1
+          example: null
+        retention:
+          description: Withholding tax percentage (%). Must be a number between 0 and 99.99.
+          type: number
+          minimum: 0
+          maximum: 99.99
+          example: null
+        permalink:
+          description: Permalink.
+          type: string
+          readOnly: true
+          example: https://www.app.invoicexpress.com/documents/81967052fb50a36404eca4a16ead6101a818d87f249de9bf
+
     preferred_contact:
       description: The preferred contact details.
       type: object
@@ -182,7 +173,23 @@ components:
             $ref: '#/components/schemas/errorArray'
           example:
             errors: [
-              error: 'Invalid API key'
+                error: 'Invalid API key'
+            ]
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/javascript:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+          example:
+            errors: [
+                error: "There's an ongoing document creation with the provided UID"
             ]
         application/xml:
           schema:
@@ -198,7 +205,7 @@ components:
             $ref: '#/components/schemas/errorArray'
           example:
             errors: [
-              error: 'Name is a required field'
+                error: 'Name is a required field'
             ]
         application/xml:
           schema:
