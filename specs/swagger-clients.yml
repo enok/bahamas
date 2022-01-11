@@ -50,7 +50,7 @@ components:
       name: api_key
   schemas:
     clientPostResponse:
-      description: Business objects that represents a Client.
+      description: Business objects that represents a request to create a Client.
       type: object
       required:
         - client
@@ -60,7 +60,7 @@ components:
       xml:
         name: xml
     clientPostRequest:
-      description: Objeto de negócio contendo os dados submetidos à API.  <br>Aplicado workaround para bug do 'oneOf' - utilizar apenas um 'data'
+      description: Business objects that represents a response from Client creation.
       type: object
       required:
         - client
