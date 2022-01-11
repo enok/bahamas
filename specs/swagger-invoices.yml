@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   title: Clients
-  description: <table><thead><tr><th>Version</th><th>Author</th><th>Date</th><th>Description</th><th>Revision by</th></tr></thead><tbody><tr><td>1.0.0</td><td>Enok</td><td>2022-01-09</td><td>Creates a new client (POST)</td><td> - </td></tr></tbody></table>
-  version: 1;2022-01-09
+  description: <table><thead><tr><th>Version</th><th>Author</th><th>Date</th><th>Description</th><th>Revision by</th></tr></thead><tbody><tr><td>1.0.0</td><td>Enok</td><td>2021-08-01</td><td>Creates a new client (POST)</td><td> - </td></tr></tbody></table>
+  version: 1;2021-08-01
   contact:
     name: Enok
     email: enok.jesus@gmail.com
