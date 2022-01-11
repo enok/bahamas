@@ -141,7 +141,7 @@ components:
       type: object
       properties:
         name:
-          description: 	Name of the preferred contact on your new client.
+          description: Name of the preferred contact on your new client.
           type: string
           example: 'Bruce Norris'
         email:
