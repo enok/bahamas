@@ -197,7 +197,7 @@ public class Item {
    * @return unit
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "The item unit of measure.")
+  @ApiModelProperty(example = "service", value = "The item unit of measure.")
   @JsonProperty(JSON_PROPERTY_UNIT)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 

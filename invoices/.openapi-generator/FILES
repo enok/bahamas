@@ -43,3 +43,13 @@ src/main/java/gov/bahamas/invoices/model/InvoicePostResponse.java
 src/main/java/gov/bahamas/invoices/model/Item.java
 src/main/java/gov/bahamas/invoices/model/PreferredContact.java
 src/main/java/gov/bahamas/invoices/model/Tax.java
+src/test/java/gov/bahamas/invoices/InvoicesJsonApiTest.java
+src/test/java/gov/bahamas/invoices/model/ClientTest.java
+src/test/java/gov/bahamas/invoices/model/ErrorArrayTest.java
+src/test/java/gov/bahamas/invoices/model/ErrorTest.java
+src/test/java/gov/bahamas/invoices/model/InvoicePostRequestTest.java
+src/test/java/gov/bahamas/invoices/model/InvoicePostResponseTest.java
+src/test/java/gov/bahamas/invoices/model/InvoiceTest.java
+src/test/java/gov/bahamas/invoices/model/ItemTest.java
+src/test/java/gov/bahamas/invoices/model/PreferredContactTest.java
+src/test/java/gov/bahamas/invoices/model/TaxTest.java

@@ -15,10 +15,10 @@ Name | Type | Description | Notes
 **dueDate** | **LocalDate** | The invoice due date. Must be in format dd/mm/yyyy ex.: 03/12/2015. If format is invalid, date will be set to current date. | 
 **reference** | **String** | The invoice purchase order reference field. |  [optional]
 **observations** | **String** | Invoice observations, these will be printed with the invoice. |  [optional]
-**retention** | **Integer** | Withholding tax percentage (%). Must be a number between 0 and 99.99. |  [optional]
+**retention** | **Double** | Withholding tax percentage (%). Must be a number between 0 and 99.99. |  [optional]
 **permalink** | **String** | Permalink. |  [optional] [readonly]
 **sum** | **Double** | Sum of totals of all itens. |  [optional] [readonly]
-**discount** | **Double** | Sum of discounts of all itens. |  [optional]
+**discount** | **Double** | Sum of discounts of all itens. |  [optional] [readonly]
 **beforeTaxes** | **Double** | Sum before taxes. |  [optional] [readonly]
 **taxes** | **Double** | Sum of taxes of all itens. |  [optional] [readonly]
 **total** | **Double** | Total sum with total taxes. |  [optional] [readonly]

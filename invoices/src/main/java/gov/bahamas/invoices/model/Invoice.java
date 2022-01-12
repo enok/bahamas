@@ -95,7 +95,7 @@ public class Invoice {
   private String observations;
 
   public static final String JSON_PROPERTY_RETENTION = "retention";
-  private Integer retention;
+  private Double retention;
 
   public static final String JSON_PROPERTY_PERMALINK = "permalink";
   private String permalink;
@@ -279,7 +279,7 @@ public class Invoice {
    * @return reference
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "The invoice purchase order reference field.")
+  @ApiModelProperty(example = "999", value = "The invoice purchase order reference field.")
   @JsonProperty(JSON_PROPERTY_REFERENCE)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
@@ -304,7 +304,7 @@ public class Invoice {
    * @return observations
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "Invoice observations, these will be printed with the invoice.")
+  @ApiModelProperty(example = "Observations", value = "Invoice observations, these will be printed with the invoice.")
   @JsonProperty(JSON_PROPERTY_OBSERVATIONS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
@@ -318,7 +318,7 @@ public class Invoice {
   }
 
 
-  public Invoice retention(Integer retention) {
+  public Invoice retention(Double retention) {
     
     this.retention = retention;
     return this;
@@ -326,21 +326,21 @@ public class Invoice {
 
    /**
    * Withholding tax percentage (%). Must be a number between 0 and 99.99.
-   * minimum: 0
-   * maximum: 99
+   * minimum: 0.0
+   * maximum: 99.99
    * @return retention
   **/
   @javax.annotation.Nullable
- @Min(0) @Max(99)  @ApiModelProperty(value = "Withholding tax percentage (%). Must be a number between 0 and 99.99.")
+ @DecimalMin("0.0") @DecimalMax("99.99")  @ApiModelProperty(example = "0.0", value = "Withholding tax percentage (%). Must be a number between 0 and 99.99.")
   @JsonProperty(JSON_PROPERTY_RETENTION)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getRetention() {
+  public Double getRetention() {
     return retention;
   }
 
 
-  public void setRetention(Integer retention) {
+  public void setRetention(Double retention) {
     this.retention = retention;
   }
 
@@ -377,12 +377,6 @@ public class Invoice {
 
 
 
-  public Invoice discount(Double discount) {
-    
-    this.discount = discount;
-    return this;
-  }
-
    /**
    * Sum of discounts of all itens.
    * minimum: 0.0
@@ -398,9 +392,6 @@ public class Invoice {
   }
 
 
-  public void setDiscount(Double discount) {
-    this.discount = discount;
-  }
 
 
    /**
@@ -635,7 +626,7 @@ public class Invoice {
    * @return ownerInvoiceId
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(example = "12345", value = "The (owner) invoice associated to this document. This option is only available for credit_notes or debit_notes. You can also send the (owner) guide id when creating an invoice to associate an invoice to a guide.")
+  @ApiModelProperty(value = "The (owner) invoice associated to this document. This option is only available for credit_notes or debit_notes. You can also send the (owner) guide id when creating an invoice to associate an invoice to a guide.")
   @JsonProperty(JSON_PROPERTY_OWNER_INVOICE_ID)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 

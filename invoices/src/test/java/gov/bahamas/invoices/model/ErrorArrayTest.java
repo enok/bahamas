@@ -1,5 +1,5 @@
 /*
- * Clients
+ * Invoices
  * <table><thead><tr><th>Version</th><th>Author</th><th>Date</th><th>Description</th><th>Revision by</th></tr></thead><tbody><tr><td>1.0.0</td><td>Enok</td><td>2022-01-10</td><td>Creates a new invoice (POST)</td><td> - </td></tr></tbody></table>
  *
  * The version of the OpenAPI document: 1;2022-01-10
