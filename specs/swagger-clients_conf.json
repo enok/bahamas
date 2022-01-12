@@ -1,0 +1,27 @@
+{
+  "groupId": "gov.bahamas",
+  "artifactId": "clients",
+  "artifactVersion": "1.0.0",
+  "artifactDescription": "InvoicExpress Clients",
+
+  "basePackage": "gov.bahamas.clients",
+  "configPackage": "gov.bahamas.clients.config",
+  "apiPackage": "gov.bahamas.clients",
+  "modelPackage": "gov.bahamas.clients.model",
+
+  "artifactUrl": "https://github.com/enok/bahamas",
+  "scmConnection": "git@github.com:enok/bahamas.git",
+  "scmDeveloperConnection": "git@github.com:enok/bahamas.git",
+  "scmUrl": "https://github.com/enok/bahamas",
+
+  "dateLibrary": "java8",
+  "developerEmail": "enok.jesus@gmail.com",
+  "developerName": "Enok",
+  "hideGenerationTimestamp": true,
+  "library": "resttemplate",
+  "performBeanValidation": true,
+  "useBeanValidation": true,
+  "useReflectionEqualsHashCode": true,
+  "useRuntimeException": true,
+  "interfaceOnly": true
+}

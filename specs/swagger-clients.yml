@@ -7,7 +7,7 @@ info:
     name: Enok
     email: enok.jesus@gmail.com
 security:
-  - api_key: []
+  - api_key: [ ]
 paths:
   /clients.json:
     post:
@@ -72,6 +72,9 @@ components:
     client:
       description: Business object that represents a Client.
       type: object
+      required:
+        - name
+        - code
       properties:
         id:
           description: Id auto-generated for a Client
@@ -182,7 +185,7 @@ components:
             $ref: '#/components/schemas/errorArray'
           example:
             errors: [
-              error: 'Invalid API key'
+                error: 'Invalid API key'
             ]
         application/xml:
           schema:
@@ -198,7 +201,7 @@ components:
             $ref: '#/components/schemas/errorArray'
           example:
             errors: [
-              error: 'Name is a required field'
+                error: 'Name is a required field'
             ]
         application/xml:
           schema:

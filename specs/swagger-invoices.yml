@@ -7,7 +7,7 @@ info:
     name: Enok
     email: enok.jesus@gmail.com
 security:
-  - api_key: []
+  - api_key: [ ]
 paths:
   /invoices.json:
     post:
@@ -69,11 +69,21 @@ components:
       properties:
         invoice:
           $ref: '#/components/schemas/invoice'
+        proprietary_uid:
+          description: When sending your process' UUID you will prevent the creation of duplicate requests.
+          type: string
+          writeOnly: true
+          example: UUID41237123189981ddajkls23478y
       xml:
         name: xml
     invoice:
       description: Business object that represents an Invoice.
       type: object
+      required:
+        - date
+        - due_date
+        - client
+        - items
       properties:
         id:
           description: Id auto-generated for a Client.
@@ -117,7 +127,7 @@ components:
           example: null
         retention:
           description: Withholding tax percentage (%). Must be a number between 0 and 99.99.
-          type: number
+          type: integer
           minimum: 0
           maximum: 99.99
           example: null
@@ -126,23 +136,177 @@ components:
           type: string
           readOnly: true
           example: https://www.app.invoicexpress.com/documents/81967052fb50a36404eca4a16ead6101a818d87f249de9bf
-
-    preferred_contact:
-      description: The preferred contact details.
+        sum:
+          description: Sum of totals of all itens.
+          type: number
+          format: double
+          readOnly: true
+          example: 500.0
+        discount:
+          description: Sum of discounts of all itens.
+          type: number
+          format: double
+          minimum: 0.0
+          default: 0.0
+          example: 0.0
+        before_taxes:
+          description: Sum before taxes.
+          type: number
+          format: double
+          readOnly: true
+          example: 500.0
+        taxes:
+          description: Sum of taxes of all itens.
+          type: number
+          format: double
+          readOnly: true
+          example: 25.0
+        total:
+          description: Total sum with total taxes.
+          type: number
+          format: double
+          readOnly: true
+          example: 525.0
+        tax_exemption:
+          description: Portuguese IVA exemption code. Required for portuguese accounts on invoices with IVA exempt items (0%). Refer to the Appendix for the complete list of “IVA Exemption Codes”.
+          type: string
+          writeOnly: true
+          example: M01
+        sequence_number:
+          description: Sequence number.
+          type: string
+          readOnly: true
+          example: 6/G
+        sequence_id:
+          description: Id of the sequence you want to use with this invoice. If missing, the default sequence will be used.
+          type: string
+          example: 112233
+        manual_sequence_number:
+          description: Required for non portuguese accounts with manual sequence numbering.
+          type: string
+          writeOnly: true
+          example: 1
+        client:
+          $ref: 'swagger-clients.yml#/components/schemas/client'
+        items:
+          description: An array of invoice items. If items with the given names do not exist, they are created. If an item already exists, it is updated with the new values. At least one is required.
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/item'
+        mb_reference:
+          description: Generates a Multibanco Reference after you finalize your invoice. This option is only available for Portuguese Accounts. You must have the feature enabled on your account first.
+          type: string
+          writeOnly: true
+          example: "0"
+        owner_invoice_id:
+          description: The (owner) invoice associated to this document. This option is only available for credit_notes or debit_notes. You can also send the (owner) guide id when creating an invoice to associate an invoice to a guide.
+          type: integer
+          writeOnly: true
+          example: 12345
+        tax_exemption_reason:
+          description: Used when updating a document and removing all tax exempt items. The code M00 means 'Without tax exemption'.
+          type: string
+          writeOnly: true
+          example: "M00"
+        currency_code:
+          description: If your plan as multicurrency, you can issue invoices in another currency than your account's default currency. The currency_code should be one of the following ISO 4217 currency codes.
+          type: string
+          writeOnly: true
+          example: "BRL"
+        currency:
+          type: string
+          readOnly: true
+          example: "Brazilian real"
+        rate:
+          description: When sending a currency_code you can specify its' rate.
+          type: number
+          format: double
+          writeOnly: true
+          example: 1.23565
+    item:
+      description: Invoice item.
       type: object
+      required:
+        - name
+        - description
+        - unit_price
+        - quantity
       properties:
         name:
-          description: Name of the preferred contact on your new client.
+          description: Name of the item. Must be unique.
           type: string
-          example: 'Bruce Norris'
-        email:
-          description: Email of the preferred contact on your new client.
+          example: 'Item Name'
+        description:
+          description: Item’s description.
           type: string
-          example: email@invoicexpress.com
-        phone:
-          description: Phone number of the preferred contact on your new client.
+          example: 'Item Description'
+        unit_price:
+          description: Item’s unit price. Must be a number equal or greater than 0.0.
+          type: number
+          format: double
+          minimum: 0.0
+          example: 100.0
+        quantity:
+          description: Quantity. Must be a number equal or greater than 0.
+          type: integer
+          minimum: 0.0
+          example: 5
+        unit:
+          description: The item unit of measure.
           type: string
-          example: '213456789'
+          example: null
+        discount:
+          description: The item discount percentage(%). Defaults to 0.0. Must be a value between 0.0 and 100.0 inclusive.
+          type: number
+          format: double
+          minimum: 0.0
+          default: 0.0
+          example: 0.0
+        tax:
+          description: The tax applied to the item line. If not present the default tax is applied to the item.
+          $ref: '#/components/schemas/tax'
+        discount_amount:
+          type: number
+          format: double
+          readOnly: true
+          example: 0.0
+        subtotal:
+          type: number
+          format: double
+          readOnly: true
+          example: 500.0
+        tax_amount:
+          type: number
+          format: double
+          readOnly: true
+          example: 25.0
+        total:
+          type: number
+          format: double
+          readOnly: true
+          example: 525.0
+    tax:
+      description: The tax applied to the item line.
+      type: object
+      required:
+        - name
+      properties:
+        id:
+          description: Tax id.
+          type: integer
+          readOnly: true
+          example: 409738
+        name:
+          description: The tax name to be used on this item line. If not found the default tax is applied to the line item.
+          type: string
+          example: 'VAT'
+        value:
+          description: Tax value.
+          type: number
+          format: double
+          readOnly: true
+          example: 5.0
     errorArray:
       description: Array of errors
       type: object

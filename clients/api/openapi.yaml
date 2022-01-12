@@ -1,0 +1,292 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: enok.jesus@gmail.com
+    name: Enok
+  description: <table><thead><tr><th>Version</th><th>Author</th><th>Date</th><th>Description</th><th>Revision
+    by</th></tr></thead><tbody><tr><td>1.0.0</td><td>Enok</td><td>2022-01-09</td><td>Creates
+    a new client (POST)</td><td> - </td></tr></tbody></table>
+  title: Clients
+  version: 1;2022-01-09
+servers:
+- url: https://enok.app.invoicexpress.com
+security:
+- api_key: []
+paths:
+  /clients.json:
+    post:
+      description: 'To try it out use api_key: 8b90b198bb858c0e047ee107175c51cd9a3d25a2'
+      parameters:
+      - description: Consumer api key.
+        explode: true
+        in: query
+        name: api_key
+        required: true
+        schema:
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/clientPostRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/clientPostResponse'
+          description: Business objects that represents a Client.
+        "401":
+          content:
+            application/json:
+              example:
+                errors:
+                - error: Invalid API key
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/javascript:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+          description: Acess Denied
+        "422":
+          content:
+            application/json:
+              example:
+                errors:
+                - error: Name is a required field
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/javascript:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+          description: Unprocessable Entity
+      summary: Creates a new client.
+      tags:
+      - /clients.json
+      x-contentType: application/json
+      x-accepts: application/json
+components:
+  responses:
+    "401":
+      content:
+        application/json:
+          example:
+            errors:
+            - error: Invalid API key
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/javascript:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+      description: Acess Denied
+    "422":
+      content:
+        application/json:
+          example:
+            errors:
+            - error: Name is a required field
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/javascript:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+      description: Unprocessable Entity
+  schemas:
+    clientPostResponse:
+      description: Business objects that represents a request to create a Client.
+      example:
+        client:
+          send_options: 1
+          country: Portugal
+          website: www.invoicexpress.com
+          code: "12345"
+          address: Avenida da República, Lisboa
+          city: Lisboa
+          language: pt
+          phone: "213456789"
+          preferred_contact:
+            phone: "213456789"
+            name: Bruce Norris
+            email: email@invoicexpress.com
+          observations: Observations
+          name: Client Name
+          fiscal_id: "508025338"
+          id: 41079180
+          postal_code: 1050-555
+          fax: "213456788"
+          email: foo@bar.com
+      properties:
+        client:
+          $ref: '#/components/schemas/client'
+      required:
+      - client
+      type: object
+      xml:
+        name: xml
+    clientPostRequest:
+      description: Business objects that represents a response from Client creation.
+      properties:
+        client:
+          $ref: '#/components/schemas/client'
+      required:
+      - client
+      type: object
+      xml:
+        name: xml
+    client:
+      description: Business object that represents a Client.
+      example:
+        send_options: 1
+        country: Portugal
+        website: www.invoicexpress.com
+        code: "12345"
+        address: Avenida da República, Lisboa
+        city: Lisboa
+        language: pt
+        phone: "213456789"
+        preferred_contact:
+          phone: "213456789"
+          name: Bruce Norris
+          email: email@invoicexpress.com
+        observations: Observations
+        name: Client Name
+        fiscal_id: "508025338"
+        id: 41079180
+        postal_code: 1050-555
+        fax: "213456788"
+        email: foo@bar.com
+      properties:
+        id:
+          description: Id auto-generated for a Client
+          example: 41079180
+          readOnly: true
+          type: integer
+        name:
+          description: Client name, normally used for a company name.
+          example: Client Name
+          type: string
+        code:
+          description: Client code, your specific code for the client.
+          example: "12345"
+          type: string
+        email:
+          description: 'Client email address. Must be a valid email address ex: foo@bar.com'
+          example: foo@bar.com
+          type: string
+        language:
+          description: Client language. May be en, pt or es; defaults to the account
+            language.
+          example: pt
+          type: string
+        address:
+          description: Client company address.
+          example: Avenida da República, Lisboa
+          type: string
+        city:
+          description: Client’s city.
+          example: Lisboa
+          type: string
+        postal_code:
+          description: Client’s postal code for it’s company address.
+          example: 1050-555
+          type: string
+        country:
+          description: Country, normally used for a company country. Although country
+            is optional, when supplied, it should match one of the country list on
+            the Appendix of this Documentation.
+          example: Portugal
+          type: string
+        fiscal_id:
+          description: The client fiscal ID (Número de Contribuinte).
+          example: "508025338"
+          type: string
+        website:
+          description: The client web address.
+          example: www.invoicexpress.com
+          type: string
+        phone:
+          description: The client phone number.
+          example: "213456789"
+          type: string
+        fax:
+          description: The client fax number.
+          example: "213456788"
+          type: string
+        preferred_contact:
+          $ref: '#/components/schemas/preferred_contact'
+        observations:
+          description: Default observations for the client, the text in here will
+            be added to the observations field of all the invoices sent to this client.
+          example: Observations
+          type: string
+        send_options:
+          description: 'Send options for the client. Available options are: 1 - send
+            only the original document / 2 – the original and duplicate / 3 – the
+            original, duplicate and triplicate. These affect the generated pdf.'
+          example: 1
+          type: integer
+      required:
+      - code
+      - name
+      type: object
+    preferred_contact:
+      description: The preferred contact details.
+      example:
+        phone: "213456789"
+        name: Bruce Norris
+        email: email@invoicexpress.com
+      properties:
+        name:
+          description: Name of the preferred contact on your new client.
+          example: Bruce Norris
+          type: string
+        email:
+          description: Email of the preferred contact on your new client.
+          example: email@invoicexpress.com
+          type: string
+        phone:
+          description: Phone number of the preferred contact on your new client.
+          example: "213456789"
+          type: string
+      type: object
+    errorArray:
+      description: Array of errors
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/error'
+          type: array
+      required:
+      - errors
+      type: object
+    error:
+      description: Object that represents a http error
+      properties:
+        error:
+          description: Error string.
+          type: string
+      required:
+      - error
+      type: object
+      xml:
+        name: xml
+  securitySchemes:
+    api_key:
+      in: query
+      name: api_key
+      type: apiKey
+
