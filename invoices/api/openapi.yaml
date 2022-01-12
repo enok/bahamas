@@ -1,0 +1,719 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: enok.jesus@gmail.com
+    name: Enok
+  description: <table><thead><tr><th>Version</th><th>Author</th><th>Date</th><th>Description</th><th>Revision
+    by</th></tr></thead><tbody><tr><td>1.0.0</td><td>Enok</td><td>2022-01-10</td><td>Creates
+    a new invoice (POST)</td><td> - </td></tr></tbody></table>
+  title: Invoices
+  version: 1;2022-01-10
+servers:
+- url: https://enok.app.invoicexpress.com
+security:
+- api_key: []
+paths:
+  /invoices.json:
+    post:
+      description: 'To try it out use api_key: 8b90b198bb858c0e047ee107175c51cd9a3d25a2'
+      parameters:
+      - description: Consumer api key.
+        explode: true
+        in: query
+        name: api_key
+        required: true
+        schema:
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/invoicePostRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invoicePostResponse'
+          description: Business objects that represents an Invoice.
+        "401":
+          content:
+            application/json:
+              example:
+                errors:
+                - error: Invalid API key
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/javascript:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+          description: Acess Denied
+        "409":
+          content:
+            application/json:
+              example:
+                errors:
+                - error: There's an ongoing document creation with the provided UID
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/javascript:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+          description: Conflict
+        "422":
+          content:
+            application/json:
+              example:
+                errors:
+                - error: Name is a required field
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+            application/javascript:
+              schema:
+                $ref: '#/components/schemas/errorArray'
+          description: Unprocessable Entity
+      summary: Creates a new invoice.
+      tags:
+      - /invoices.json
+      x-contentType: application/json
+      x-accepts: application/json
+components:
+  responses:
+    "401":
+      content:
+        application/json:
+          example:
+            errors:
+            - error: Invalid API key
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/javascript:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+      description: Acess Denied
+    "409":
+      content:
+        application/json:
+          example:
+            errors:
+            - error: There's an ongoing document creation with the provided UID
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/javascript:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+      description: Conflict
+    "422":
+      content:
+        application/json:
+          example:
+            errors:
+            - error: Name is a required field
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+        application/javascript:
+          schema:
+            $ref: '#/components/schemas/errorArray'
+      description: Unprocessable Entity
+  schemas:
+    invoicePostResponse:
+      description: Business objects that represents a request to create an Invoice.
+      example:
+        invoice:
+          date: 2000-01-23
+          discount: 0.0
+          taxes: 25.0
+          sum: 500.0
+          type: Invoice
+          currency_code: BRL
+          reference: reference
+          archived: false
+          total: 525.0
+          tax_exemption: M01
+          owner_invoice_id: 12345
+          tax_exemption_reason: M00
+          rate: 1.23565
+          observations: observations
+          sequence_id: "112233"
+          manual_sequence_number: "1"
+          client:
+            send_options: 1
+            country: Portugal
+            website: www.invoicexpress.com
+            code: "12345"
+            address: Avenida da República, Lisboa
+            city: Lisboa
+            language: pt
+            phone: "213456789"
+            preferred_contact:
+              phone: "213456789"
+              name: Bruce Norris
+              email: email@invoicexpress.com
+            observations: Observations
+            name: Client Name
+            fiscal_id: "508025338"
+            id: 41079180
+            postal_code: 1050-555
+            fax: "213456788"
+            email: foo@bar.com
+          currency: Brazilian real
+          id: 81967052
+          retention: 8
+          due_date: 2000-01-23
+          before_taxes: 500.0
+          mb_reference: "0"
+          sequence_number: 6/G
+          permalink: https://www.app.invoicexpress.com/documents/81967052fb50a36404eca4a16ead6101a818d87f249de9bf
+          items:
+          - tax_amount: 25.0
+            unit: unit
+            total: 525.0
+            quantity: 5
+            discount_amount: 0.0
+            subtotal: 500.0
+            name: Item Name
+            description: Item Description
+            discount: 0.0
+            tax:
+              name: VAT
+              id: 409738
+              value: 5.0
+            unit_price: 100.0
+          - tax_amount: 25.0
+            unit: unit
+            total: 525.0
+            quantity: 5
+            discount_amount: 0.0
+            subtotal: 500.0
+            name: Item Name
+            description: Item Description
+            discount: 0.0
+            tax:
+              name: VAT
+              id: 409738
+              value: 5.0
+            unit_price: 100.0
+          status: draft
+      properties:
+        invoice:
+          $ref: '#/components/schemas/invoice'
+      required:
+      - invoice
+      type: object
+      xml:
+        name: xml
+    invoicePostRequest:
+      description: Business objects that represents a response from Invoice creation.
+      properties:
+        invoice:
+          $ref: '#/components/schemas/invoice'
+        proprietary_uid:
+          description: When sending your process' UUID you will prevent the creation
+            of duplicate requests.
+          example: UUID41237123189981ddajkls23478y
+          type: string
+          writeOnly: true
+      required:
+      - invoice
+      type: object
+      xml:
+        name: xml
+    invoice:
+      description: Business object that represents an Invoice.
+      example:
+        date: 2000-01-23
+        discount: 0.0
+        taxes: 25.0
+        sum: 500.0
+        type: Invoice
+        currency_code: BRL
+        reference: reference
+        archived: false
+        total: 525.0
+        tax_exemption: M01
+        owner_invoice_id: 12345
+        tax_exemption_reason: M00
+        rate: 1.23565
+        observations: observations
+        sequence_id: "112233"
+        manual_sequence_number: "1"
+        client:
+          send_options: 1
+          country: Portugal
+          website: www.invoicexpress.com
+          code: "12345"
+          address: Avenida da República, Lisboa
+          city: Lisboa
+          language: pt
+          phone: "213456789"
+          preferred_contact:
+            phone: "213456789"
+            name: Bruce Norris
+            email: email@invoicexpress.com
+          observations: Observations
+          name: Client Name
+          fiscal_id: "508025338"
+          id: 41079180
+          postal_code: 1050-555
+          fax: "213456788"
+          email: foo@bar.com
+        currency: Brazilian real
+        id: 81967052
+        retention: 8
+        due_date: 2000-01-23
+        before_taxes: 500.0
+        mb_reference: "0"
+        sequence_number: 6/G
+        permalink: https://www.app.invoicexpress.com/documents/81967052fb50a36404eca4a16ead6101a818d87f249de9bf
+        items:
+        - tax_amount: 25.0
+          unit: unit
+          total: 525.0
+          quantity: 5
+          discount_amount: 0.0
+          subtotal: 500.0
+          name: Item Name
+          description: Item Description
+          discount: 0.0
+          tax:
+            name: VAT
+            id: 409738
+            value: 5.0
+          unit_price: 100.0
+        - tax_amount: 25.0
+          unit: unit
+          total: 525.0
+          quantity: 5
+          discount_amount: 0.0
+          subtotal: 500.0
+          name: Item Name
+          description: Item Description
+          discount: 0.0
+          tax:
+            name: VAT
+            id: 409738
+            value: 5.0
+          unit_price: 100.0
+        status: draft
+      properties:
+        id:
+          description: Id auto-generated for a Client.
+          example: 81967052
+          readOnly: true
+          type: integer
+        status:
+          description: Represents the Invoice current status.
+          example: draft
+          readOnly: true
+          type: string
+        archived:
+          description: If the Invoice was archived.
+          example: false
+          readOnly: true
+          type: boolean
+        type:
+          description: The type of document created.
+          example: Invoice
+          readOnly: true
+          type: string
+        date:
+          description: 'The invoice date. Must be in format dd/mm/yyyy ex.: 03/12/2015.
+            If format is invalid, date will be set to current date.'
+          format: date
+          pattern: ^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$
+          type: string
+        due_date:
+          description: 'The invoice due date. Must be in format dd/mm/yyyy ex.: 03/12/2015.
+            If format is invalid, date will be set to current date.'
+          format: date
+          pattern: ^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$
+          type: string
+        reference:
+          description: The invoice purchase order reference field.
+          type: string
+        observations:
+          description: Invoice observations, these will be printed with the invoice.
+          type: string
+        retention:
+          description: Withholding tax percentage (%). Must be a number between 0
+            and 99.99.
+          maximum: 99.99
+          minimum: 0
+          type: integer
+        permalink:
+          description: Permalink.
+          example: https://www.app.invoicexpress.com/documents/81967052fb50a36404eca4a16ead6101a818d87f249de9bf
+          readOnly: true
+          type: string
+        sum:
+          description: Sum of totals of all itens.
+          example: 500.0
+          format: double
+          readOnly: true
+          type: number
+        discount:
+          default: 0.0
+          description: Sum of discounts of all itens.
+          example: 0.0
+          format: double
+          minimum: 0.0
+          type: number
+        before_taxes:
+          description: Sum before taxes.
+          example: 500.0
+          format: double
+          readOnly: true
+          type: number
+        taxes:
+          description: Sum of taxes of all itens.
+          example: 25.0
+          format: double
+          readOnly: true
+          type: number
+        total:
+          description: Total sum with total taxes.
+          example: 525.0
+          format: double
+          readOnly: true
+          type: number
+        tax_exemption:
+          description: Portuguese IVA exemption code. Required for portuguese accounts
+            on invoices with IVA exempt items (0%). Refer to the Appendix for the
+            complete list of “IVA Exemption Codes”.
+          example: M01
+          type: string
+          writeOnly: true
+        sequence_number:
+          description: Sequence number.
+          example: 6/G
+          readOnly: true
+          type: string
+        sequence_id:
+          description: Id of the sequence you want to use with this invoice. If missing,
+            the default sequence will be used.
+          example: "112233"
+          type: string
+        manual_sequence_number:
+          description: Required for non portuguese accounts with manual sequence numbering.
+          example: "1"
+          type: string
+          writeOnly: true
+        client:
+          $ref: '#/components/schemas/client'
+        items:
+          description: An array of invoice items. If items with the given names do
+            not exist, they are created. If an item already exists, it is updated
+            with the new values. At least one is required.
+          items:
+            $ref: '#/components/schemas/item'
+          minItems: 1
+          type: array
+        mb_reference:
+          description: Generates a Multibanco Reference after you finalize your invoice.
+            This option is only available for Portuguese Accounts. You must have the
+            feature enabled on your account first.
+          example: "0"
+          type: string
+          writeOnly: true
+        owner_invoice_id:
+          description: The (owner) invoice associated to this document. This option
+            is only available for credit_notes or debit_notes. You can also send the
+            (owner) guide id when creating an invoice to associate an invoice to a
+            guide.
+          example: 12345
+          type: integer
+          writeOnly: true
+        tax_exemption_reason:
+          description: Used when updating a document and removing all tax exempt items.
+            The code M00 means 'Without tax exemption'.
+          example: M00
+          type: string
+          writeOnly: true
+        currency_code:
+          description: If your plan as multicurrency, you can issue invoices in another
+            currency than your account's default currency. The currency_code should
+            be one of the following ISO 4217 currency codes.
+          example: BRL
+          type: string
+          writeOnly: true
+        currency:
+          example: Brazilian real
+          readOnly: true
+          type: string
+        rate:
+          description: When sending a currency_code you can specify its' rate.
+          example: 1.23565
+          format: double
+          type: number
+          writeOnly: true
+      required:
+      - client
+      - date
+      - due_date
+      - items
+      type: object
+    item:
+      description: Invoice item.
+      example:
+        tax_amount: 25.0
+        unit: unit
+        total: 525.0
+        quantity: 5
+        discount_amount: 0.0
+        subtotal: 500.0
+        name: Item Name
+        description: Item Description
+        discount: 0.0
+        tax:
+          name: VAT
+          id: 409738
+          value: 5.0
+        unit_price: 100.0
+      properties:
+        name:
+          description: Name of the item. Must be unique.
+          example: Item Name
+          type: string
+        description:
+          description: Item’s description.
+          example: Item Description
+          type: string
+        unit_price:
+          description: Item’s unit price. Must be a number equal or greater than 0.0.
+          example: 100.0
+          format: double
+          minimum: 0.0
+          type: number
+        quantity:
+          description: Quantity. Must be a number equal or greater than 0.
+          example: 5
+          minimum: 0.0
+          type: integer
+        unit:
+          description: The item unit of measure.
+          type: string
+        discount:
+          default: 0.0
+          description: The item discount percentage(%). Defaults to 0.0. Must be a
+            value between 0.0 and 100.0 inclusive.
+          example: 0.0
+          format: double
+          minimum: 0.0
+          type: number
+        tax:
+          $ref: '#/components/schemas/tax'
+        discount_amount:
+          example: 0.0
+          format: double
+          readOnly: true
+          type: number
+        subtotal:
+          example: 500.0
+          format: double
+          readOnly: true
+          type: number
+        tax_amount:
+          example: 25.0
+          format: double
+          readOnly: true
+          type: number
+        total:
+          example: 525.0
+          format: double
+          readOnly: true
+          type: number
+      required:
+      - description
+      - name
+      - quantity
+      - unit_price
+      type: object
+    tax:
+      description: The tax applied to the item line.
+      example:
+        name: VAT
+        id: 409738
+        value: 5.0
+      properties:
+        id:
+          description: Tax id.
+          example: 409738
+          readOnly: true
+          type: integer
+        name:
+          description: The tax name to be used on this item line. If not found the
+            default tax is applied to the line item.
+          example: VAT
+          type: string
+        value:
+          description: Tax value.
+          example: 5.0
+          format: double
+          readOnly: true
+          type: number
+      required:
+      - name
+      type: object
+    errorArray:
+      description: Array of errors
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/error'
+          type: array
+      required:
+      - errors
+      type: object
+    error:
+      description: Object that represents a http error
+      properties:
+        error:
+          description: Error string.
+          type: string
+      required:
+      - error
+      type: object
+      xml:
+        name: xml
+    client:
+      description: Business object that represents a Client.
+      example:
+        send_options: 1
+        country: Portugal
+        website: www.invoicexpress.com
+        code: "12345"
+        address: Avenida da República, Lisboa
+        city: Lisboa
+        language: pt
+        phone: "213456789"
+        preferred_contact:
+          phone: "213456789"
+          name: Bruce Norris
+          email: email@invoicexpress.com
+        observations: Observations
+        name: Client Name
+        fiscal_id: "508025338"
+        id: 41079180
+        postal_code: 1050-555
+        fax: "213456788"
+        email: foo@bar.com
+      properties:
+        id:
+          description: Id auto-generated for a Client
+          example: 41079180
+          readOnly: true
+          type: integer
+        name:
+          description: Client name, normally used for a company name.
+          example: Client Name
+          type: string
+        code:
+          description: Client code, your specific code for the client.
+          example: "12345"
+          type: string
+        email:
+          description: 'Client email address. Must be a valid email address ex: foo@bar.com'
+          example: foo@bar.com
+          type: string
+        language:
+          description: Client language. May be en, pt or es; defaults to the account
+            language.
+          example: pt
+          type: string
+        address:
+          description: Client company address.
+          example: Avenida da República, Lisboa
+          type: string
+        city:
+          description: Client’s city.
+          example: Lisboa
+          type: string
+        postal_code:
+          description: Client’s postal code for it’s company address.
+          example: 1050-555
+          type: string
+        country:
+          description: Country, normally used for a company country. Although country
+            is optional, when supplied, it should match one of the country list on
+            the Appendix of this Documentation.
+          example: Portugal
+          type: string
+        fiscal_id:
+          description: The client fiscal ID (Número de Contribuinte).
+          example: "508025338"
+          type: string
+        website:
+          description: The client web address.
+          example: www.invoicexpress.com
+          type: string
+        phone:
+          description: The client phone number.
+          example: "213456789"
+          type: string
+        fax:
+          description: The client fax number.
+          example: "213456788"
+          type: string
+        preferred_contact:
+          $ref: '#/components/schemas/preferred_contact'
+        observations:
+          description: Default observations for the client, the text in here will
+            be added to the observations field of all the invoices sent to this client.
+          example: Observations
+          type: string
+        send_options:
+          description: 'Send options for the client. Available options are: 1 - send
+            only the original document / 2 – the original and duplicate / 3 – the
+            original, duplicate and triplicate. These affect the generated pdf.'
+          example: 1
+          type: integer
+      required:
+      - code
+      - name
+      type: object
+    preferred_contact:
+      description: The preferred contact details.
+      example:
+        phone: "213456789"
+        name: Bruce Norris
+        email: email@invoicexpress.com
+      properties:
+        name:
+          description: Name of the preferred contact on your new client.
+          example: Bruce Norris
+          type: string
+        email:
+          description: Email of the preferred contact on your new client.
+          example: email@invoicexpress.com
+          type: string
+        phone:
+          description: Phone number of the preferred contact on your new client.
+          example: "213456789"
+          type: string
+      type: object
+  securitySchemes:
+    api_key:
+      in: query
+      name: api_key
+      type: apiKey
+
